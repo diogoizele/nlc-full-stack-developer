@@ -6,4 +6,11 @@ bunx prisma migrate deploy; do
   sleep 3
 done
 
+until
+bun prisma/seed.ts; do
+  echo "Prisma seed failed - sleeping"
+  sleep 3
+done
+
+
 bun start
