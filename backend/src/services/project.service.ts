@@ -27,7 +27,7 @@ class ProjectService {
       throw HttpError.NOT_FOUND("Project not found");
     }
 
-    return this.getServiceOrdersIdByProject(project);
+    return project;
   }
 
   async createProject(payload: CreateProjectRequest) {

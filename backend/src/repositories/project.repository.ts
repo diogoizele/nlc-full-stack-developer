@@ -15,11 +15,7 @@ class ProjectRepository implements BaseRepositoryInterface<Project> {
     return await this.database.findUnique({
       where: { id },
       include: {
-        serviceOrders: {
-          select: {
-            id: true,
-          },
-        },
+        serviceOrders: true,
       },
     });
   }
