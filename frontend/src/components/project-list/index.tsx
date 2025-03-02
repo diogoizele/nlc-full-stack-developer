@@ -11,6 +11,8 @@ const ProjectListWithoutMemo = ({ searchQuery }: ProjectListProps) => {
   const debouncedFilter = useDebounce(searchQuery, 500);
 
   const setIsLoading = useAppStore((state) => state.setIsLoading);
+  const setProjectsQuantity = useAppStore((state) => state.setProjectsQuantity);
+
   const { data, isPending, error, isError, isFetched } = useQuery({
     queryKey: ["projects", debouncedFilter],
     queryFn: () => fetchAllProjects(debouncedFilter),
@@ -28,8 +30,12 @@ const ProjectListWithoutMemo = ({ searchQuery }: ProjectListProps) => {
     return <>Error: {error?.message}</>;
   }
 
+  useEffect(() => {
+    setProjectsQuantity(data?.length || 0);
+  }, [data]);
+
   return (
-    <>
+    <div className="flex flex-wrap gap-8 mt-4">
       {data?.map((project) => (
         <ProjectCardItem
           key={project.id}
@@ -39,7 +45,7 @@ const ProjectListWithoutMemo = ({ searchQuery }: ProjectListProps) => {
           description={project.description}
         />
       ))}
-    </>
+    </div>
   );
 };
 

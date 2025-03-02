@@ -1,5 +1,7 @@
 import { useLocation, useNavigate } from "react-router";
 
+import { useQuery } from "@tanstack/react-query";
+import { fetchProjectsCount } from "../../api/projects";
 import logoutSVG from "../../assets/images/logout.svg";
 import nlcLogo from "../../assets/images/nlc-logo.png";
 import { useAuthStore } from "../../stores/auth.store";
@@ -12,6 +14,11 @@ export const Header = () => {
   const navigate = useNavigate();
 
   const clearToken = useAuthStore((state) => state.clearToken);
+
+  const { data: projectsCount } = useQuery({
+    queryKey: ["projects-count"],
+    queryFn: fetchProjectsCount,
+  });
 
   const handleLogout = () => {
     clearToken();
@@ -35,14 +42,14 @@ export const Header = () => {
       <MenuContainer>
         <MenuItem selected={pathname === "/"} to="/">
           Projects
-          <QuantityBadge quantity={10} />
+          <QuantityBadge quantity={projectsCount?.count ?? 0} />
         </MenuItem>
         <MenuItem
           selected={pathname === "/service-orders"}
           to="/service-orders"
         >
           Service Orders
-          <QuantityBadge quantity={5} />
+          <QuantityBadge quantity={0} />
         </MenuItem>
       </MenuContainer>
       <div className="flex flex-1 justify-end">

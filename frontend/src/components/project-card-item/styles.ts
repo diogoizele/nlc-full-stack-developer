@@ -6,7 +6,7 @@ export const Container = styled.div`
 
   background-color: ${({ theme }) => theme.colors.secondary};
 
-  max-width: 400px;
+  width: 400px;
   height: 250px;
 
   display: flex;

@@ -20,7 +20,6 @@ type FormData = {
 export const LoginScreen = () => {
   const {
     control,
-    register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
@@ -56,6 +55,7 @@ export const LoginScreen = () => {
         <Controller
           control={control}
           name="email"
+          rules={{ required: "* Email is required" }}
           render={({ field }) => (
             <Input
               label="Email"
@@ -63,9 +63,6 @@ export const LoginScreen = () => {
               autoCapitalize="none"
               autoCorrect="off"
               error={errors.email?.message}
-              {...register("email", {
-                required: "Email is required",
-              })}
               {...field}
             />
           )}
@@ -73,17 +70,15 @@ export const LoginScreen = () => {
         <Controller
           control={control}
           name="password"
+          rules={{ required: "Password is required" }}
           render={({ field }) => (
             <Input
               label="Password"
               type="password"
-              placeholder="Enter your password..."
+              placeholder="* Enter your password..."
               autoCapitalize="none"
               autoCorrect="off"
               error={errors.password?.message}
-              {...register("password", {
-                required: "Password is required",
-              })}
               {...field}
             />
           )}
