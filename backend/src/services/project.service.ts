@@ -1,9 +1,18 @@
 import type { CreateProjectRequest } from "../controllers/requests/create-project-request.types";
+import type { GetAllProjectsRequest } from "../controllers/requests/get-all-projects-request.types";
 import { HttpError } from "../errors/http-error";
 import ProjectRepository from "../repositories/project.repository";
 
 class ProjectService {
-  async getAllProjects() {
+  async getAllProjects({ query }: GetAllProjectsRequest) {
+    if (query) {
+      const filteredResponse = (
+        await ProjectRepository.findAllByNameOrDescription(query)
+      ).map(this.getServiceOrdersIdByProject);
+
+      return filteredResponse;
+    }
+
     const projects = (await ProjectRepository.findAll()).map(
       this.getServiceOrdersIdByProject
     );
@@ -59,7 +68,7 @@ class ProjectService {
   }) {
     return {
       ...rest,
-      serviceOrdersId: serviceOrders.map(({ id }) => id),
+      serviceOrdersIds: serviceOrders.map(({ id }) => id),
     };
   }
 }

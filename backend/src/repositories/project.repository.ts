@@ -36,6 +36,32 @@ class ProjectRepository implements BaseRepositoryInterface<Project> {
     });
   }
 
+  async findAllByNameOrDescription(query: string) {
+    return await this.database.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              contains: query,
+            },
+          },
+          {
+            description: {
+              contains: query,
+            },
+          },
+        ],
+      },
+      include: {
+        serviceOrders: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+  }
+
   async update(id: number, data: CreateProjectRequest) {
     return await this.database.update({ where: { id: id }, data });
   }

@@ -1,6 +1,6 @@
+import type { JWT } from "@fastify/jwt";
 import bcrypt from "bcrypt";
 
-import type { JWT } from "@fastify/jwt";
 import type { LoginRequest } from "../controllers/requests/login-request.types";
 import { HttpError } from "../errors/http-error";
 import UserRepository from "../repositories/user.repository";
@@ -10,7 +10,7 @@ class AuthService {
     this.loginBodyValidator({ email, password });
     const user = await UserRepository.findByEmail(email);
 
-    const isMatch = user && (await bcrypt.compare(password, user.password));
+    const isMatch = user && bcrypt.compareSync(password, user.password);
 
     if (!user || !isMatch) {
       throw HttpError.UNAUTHORIZED("Invalid credentials");

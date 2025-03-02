@@ -2,10 +2,16 @@ import type { FastifyReply, FastifyRequest } from "fastify";
 
 import ProjectService from "../services/project.service";
 import type { CreateProjectRequest } from "./requests/create-project-request.types";
+import type { GetAllProjectsRequest } from "./requests/get-all-projects-request.types";
 
 class ProjectController {
-  async getAllProjects(request: FastifyRequest, reply: FastifyReply) {
-    const response = await ProjectService.getAllProjects();
+  async getAllProjects(
+    request: FastifyRequest<{ Querystring: GetAllProjectsRequest }>,
+    reply: FastifyReply
+  ) {
+    const { query } = request.query;
+
+    const response = await ProjectService.getAllProjects({ query });
 
     return reply.code(200).send(response);
   }
