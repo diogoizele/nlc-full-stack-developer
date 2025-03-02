@@ -18,7 +18,7 @@ async function main() {
   });
 
   if (!admin) {
-    const hash = await bcrypt.hash(ADMIN_PASS, SALT_ROUNDS);
+    const hash = bcrypt.hashSync(ADMIN_PASS, SALT_ROUNDS);
 
     await prisma.user.create({
       data: {
