@@ -52,6 +52,11 @@ class ProjectService {
     await ProjectRepository.delete(id);
   }
 
+  async getProjectsCount() {
+    const count = await ProjectRepository.count();
+    return { count };
+  }
+
   private createProjectBodyValidator(body: CreateProjectRequest) {
     const { name } = body;
 

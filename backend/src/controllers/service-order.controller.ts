@@ -58,6 +58,12 @@ class ServiceOrderController {
 
     return reply.code(204).send();
   }
+
+  async countServiceOrders(request: FastifyRequest, reply: FastifyReply) {
+    const response = await ServiceOrderService.getServiceOrdersCount();
+
+    return reply.code(200).send(response);
+  }
 }
 
 export default new ServiceOrderController();

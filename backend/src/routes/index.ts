@@ -2,7 +2,7 @@ import type { FastifyPluginAsync } from "fastify";
 
 import AuthController from "../controllers/auth.controller";
 import ProjectController from "../controllers/project.controller";
-import serviceOrderController from "../controllers/service-order.controller";
+import ServiceOrderController from "../controllers/service-order.controller";
 import { requestAuthentication } from "../hooks/request-authentication";
 
 const publicRoutes: FastifyPluginAsync = async (fastify) => {
@@ -17,17 +17,22 @@ const protectedRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.post("/projects", ProjectController.createProject);
   fastify.put("/projects/:id", ProjectController.updateProject);
   fastify.delete("/projects/:id", ProjectController.deleteProject);
+  fastify.get("/projects/count", ProjectController.countProjects);
 
-  fastify.get("/service-orders", serviceOrderController.getAllServiceOrders);
+  fastify.get("/service-orders", ServiceOrderController.getAllServiceOrders);
   fastify.get(
     "/service-orders/:id",
-    serviceOrderController.getServiceOrderById
+    ServiceOrderController.getServiceOrderById
   );
-  fastify.post("/service-orders", serviceOrderController.createServiceOrder);
-  fastify.put("/service-orders/:id", serviceOrderController.updateServiceOrder);
+  fastify.post("/service-orders", ServiceOrderController.createServiceOrder);
+  fastify.put("/service-orders/:id", ServiceOrderController.updateServiceOrder);
   fastify.delete(
     "/service-orders/:id",
-    serviceOrderController.deleteServiceOrder
+    ServiceOrderController.deleteServiceOrder
+  );
+  fastify.get(
+    "/service-orders/count",
+    ServiceOrderController.countServiceOrders
   );
 };
 

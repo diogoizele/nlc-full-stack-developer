@@ -43,6 +43,12 @@ class ServiceOrderService {
     await ServiceOrderRepository.delete(id);
   }
 
+  async getServiceOrdersCount() {
+    const count = await ServiceOrderRepository.count();
+
+    return { count };
+  }
+
   private createServiceOrderBodyValidator(body: CreateServiceOrderRequest) {
     const { name, category, createdDate, isApproved, projectId, updatedDate } =
       body;

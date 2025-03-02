@@ -64,6 +64,12 @@ class ProjectController {
 
     return reply.code(204).send();
   }
+
+  async countProjects(request: FastifyRequest, reply: FastifyReply) {
+    const response = await ProjectService.getProjectsCount();
+
+    return reply.code(200).send(response);
+  }
 }
 
 export default new ProjectController(); // Singleton pattern

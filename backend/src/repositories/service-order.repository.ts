@@ -31,6 +31,10 @@ class ServiceOrderRepository implements BaseRepositoryInterface<ServiceOrder> {
   async delete(id: number) {
     return await this.database.delete({ where: { id: id } });
   }
+
+  async count() {
+    return await this.database.count();
+  }
 }
 
 export default new ServiceOrderRepository();
