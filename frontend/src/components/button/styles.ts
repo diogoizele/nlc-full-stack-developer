@@ -4,7 +4,7 @@ import { alpha } from "../../utils/alpha";
 import { ButtonProps } from "./types";
 
 export const StyledButton = styled.button<ButtonProps>`
-  padding: 0 1.5rem;
+  padding: ${({ iconButton }) => (iconButton ? "1rem" : "0 1.5rem")};
   border: ${({ variant }) => {
     switch (variant) {
       case "outlined":

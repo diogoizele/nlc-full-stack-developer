@@ -4,7 +4,6 @@ import { TextAreaProps } from "./types";
 export const TextArea = ({
   label,
   error,
-  isTextArea,
   onTextChange,
   onChangeCapture,
   ...rest

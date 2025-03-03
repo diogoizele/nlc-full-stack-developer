@@ -1,44 +1,104 @@
-import { useState } from "react";
-import { FaPlus } from "react-icons/fa6";
-
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useDebounce } from "@uidotdev/usehooks";
-import { useLocation } from "react-router";
-import { fetchAllServiceOrders } from "../../api/service-orders";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { FaPlus } from "react-icons/fa6";
+import { useLocation, useNavigate } from "react-router";
+
+import {
+  createServiceOrder,
+  fetchAllServiceOrders,
+} from "../../api/service-orders";
 import { Button } from "../../components/button";
 import { Input } from "../../components/input";
+import { ModalServiceOrderForm } from "../../components/modal-service-order-form";
 import { PageContainer } from "../../components/page-container";
+import { OptionProps } from "../../components/select/types";
 import { TableServiceOrders } from "../../components/table-service-orders";
 import { useAppStore } from "../../stores/app.store";
+
+export type ServiceOrderFormData = {
+  name: string;
+  description: string;
+  category: string;
+  projectId: number;
+  isApproved: boolean;
+};
 
 export const ServiceOrdersScreen = () => {
   const { state } = useLocation();
 
   const [searchQuery, setSearchQuery] = useState(state?.serviceOrderName);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(!!state?.create);
+  const [project, setProject] = useState<OptionProps | undefined>(
+    state.projectOption
+  );
 
   const debouncedFilter = useDebounce(searchQuery, 500);
-
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const setIsLoading = useAppStore((state) => state.setIsLoading);
 
-  const { data, isFetching, error, isError, isFetched } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ["service-orders", debouncedFilter],
     queryFn: () => fetchAllServiceOrders(debouncedFilter),
   });
 
-  if (isError) {
-  }
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    clearErrors,
+    reset,
+  } = useForm<ServiceOrderFormData>();
 
-  if (isFetching) {
+  const mutationCreateServiceOrder = useMutation({
+    mutationFn: createServiceOrder,
+    onSuccess: ({ id }) => {
+      queryClient.invalidateQueries({ queryKey: ["service-orders"] });
+      queryClient.removeQueries({ queryKey: ["service-orders"], exact: false });
+      queryClient.refetchQueries({ queryKey: ["service-orders"] });
+      queryClient.refetchQueries({ queryKey: ["service-orders-count"] });
+
+      setIsCreateModalOpen(false);
+      reset();
+      setIsLoading(false);
+      toast.success(`Service Order with id #${id} created successfully`);
+
+      if (state?.create && state?.projectId) {
+        navigate(`/projects/${state.projectId}`);
+      }
+    },
+    onError: () => {
+      setIsCreateModalOpen(false);
+      toast.error(
+        "An error occurred to create service order. Please try again later"
+      );
+    },
+  });
+
+  const onSubmit = (data: ServiceOrderFormData) => {
     setIsLoading(true);
-    return null;
-  }
+    mutationCreateServiceOrder.mutate(data);
+  };
 
-  if (isFetched || isError) {
-    setIsLoading(false);
-    if (isError) {
-      return <>Error: {error?.message}</>;
-    }
-  }
+  const handleCloseModal = () => {
+    setIsCreateModalOpen(false);
+    clearErrors();
+    reset();
+    setProject(undefined);
+  };
+
+  const handleOpenModal = () => {
+    setIsCreateModalOpen(true);
+    clearErrors();
+    reset();
+  };
+
+  useEffect(() => {
+    setIsLoading(isFetching);
+  }, [isFetching]);
 
   return (
     <PageContainer>
@@ -53,7 +113,7 @@ export const ServiceOrdersScreen = () => {
             />
           </div>
 
-          <Button icon={<FaPlus />} fullWidth={false} onClick={() => {}}>
+          <Button icon={<FaPlus />} fullWidth={false} onClick={handleOpenModal}>
             Add New
           </Button>
         </div>
@@ -63,6 +123,22 @@ export const ServiceOrdersScreen = () => {
           </div>
         </div>
       </div>
+      <ModalServiceOrderForm
+        isOpen={isCreateModalOpen}
+        control={control}
+        errors={errors}
+        title="Create Service Order"
+        cancelButtonText="Cancel"
+        defaultValues={{
+          project: {
+            id: Number(project?.value),
+            name: project?.label,
+          },
+        }}
+        submitButtonText="Create Service Order"
+        onClose={handleCloseModal}
+        onSubmit={handleSubmit(onSubmit)}
+      />
     </PageContainer>
   );
 };

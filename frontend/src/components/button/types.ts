@@ -7,4 +7,5 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
   height?: number;
   icon?: React.ReactNode;
+  iconButton?: boolean;
 }

@@ -2,6 +2,7 @@ import { createPortal } from "react-dom";
 
 import { IoClose } from "react-icons/io5";
 
+import { useEffect } from "react";
 import { CloseButton, Container, Overlay } from "./styles";
 import { ModalProps } from "./types";
 
@@ -23,6 +24,20 @@ export const Modal = ({
       onClose();
     }
   };
+
+  const handlePressEscape = (event: DocumentEventMap["keydown"]) => {
+    if (event.key === "Escape") {
+      onClose();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handlePressEscape);
+
+    return () => {
+      document.removeEventListener("keydown", handlePressEscape);
+    };
+  }, []);
 
   return createPortal(
     <Overlay onClick={handleOverlayClick}>

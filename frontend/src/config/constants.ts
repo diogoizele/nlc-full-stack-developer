@@ -1,0 +1,18 @@
+export const SERVICE_ORDER_CATEGORY_OPTIONS = [
+  "Backend",
+  "Frontend",
+  "Integration",
+  "Mobile",
+  "Design",
+  "Marketing",
+  "Management",
+  "Testing & QA",
+  "DevOps",
+  "Support",
+  "Research",
+  "Consulting",
+  "Content",
+  "Database",
+  "Cybersecurity",
+  "AI & Data Science",
+];

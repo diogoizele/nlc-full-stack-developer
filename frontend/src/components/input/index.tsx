@@ -4,7 +4,6 @@ import { InputProps } from "./types";
 export const Input = ({
   label,
   error,
-
   onTextChange,
   onChangeCapture,
   ...rest

@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa6";
 
+import { useDebounce } from "@uidotdev/usehooks";
 import { createProject } from "../../api/projects";
 import { Button } from "../../components/button";
 import { Input } from "../../components/input";
@@ -18,8 +19,10 @@ export type ProjectFormData = {
 };
 
 export const ProjectsScreen = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState<string>();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const debouncedFilter = useDebounce(searchQuery, 500);
 
   const {
     control,
@@ -32,9 +35,11 @@ export const ProjectsScreen = () => {
   const queryClient = useQueryClient();
   const setIsLoading = useAppStore((state) => state.setIsLoading);
 
-  const mutation = useMutation({
+  const mutationCreateProject = useMutation({
     mutationFn: createProject,
     onSuccess: ({ id }) => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      queryClient.removeQueries({ queryKey: ["projects"], exact: false });
       queryClient.refetchQueries({ queryKey: ["projects"] });
       queryClient.refetchQueries({ queryKey: ["projects-count"] });
 
@@ -53,7 +58,7 @@ export const ProjectsScreen = () => {
 
   const onSubmit = (data: ProjectFormData) => {
     setIsLoading(true);
-    mutation.mutate(data);
+    mutationCreateProject.mutate(data);
   };
 
   const handleOpenModal = () => {
@@ -64,7 +69,7 @@ export const ProjectsScreen = () => {
 
   return (
     <PageContainer>
-      <div className="flex flex-col gap-4 overflow-y-auto p-8">
+      <div className="flex flex-col gap-4 overflow-y-auto p-8 flex-1">
         <h2 className="font-bold text-2xl">Projects</h2>
         <div className="flex items-center justify-between">
           <div className="w-1/2 max-w-prose">
@@ -79,8 +84,7 @@ export const ProjectsScreen = () => {
             Add New
           </Button>
         </div>
-
-        <ProjectList searchQuery={searchQuery} />
+        <ProjectList searchQuery={debouncedFilter} />
       </div>
       <ModalProjectForm
         isOpen={isModalOpen}

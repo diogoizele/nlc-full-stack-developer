@@ -1,3 +1,3 @@
 export interface ProjectListProps {
-  searchQuery: string;
+  searchQuery?: string;
 }

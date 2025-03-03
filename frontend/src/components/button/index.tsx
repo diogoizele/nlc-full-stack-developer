@@ -8,7 +8,6 @@ export const Button = ({
   icon,
   variant = "filled",
   mode = "primary",
-  type = "button",
   ...props
 }: ButtonProps) => {
   return (

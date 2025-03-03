@@ -11,5 +11,7 @@ export const AttachedServiceOrdersText = styled.strong`
   font-weight: 600;
   color: ${({ theme }) => theme.colors.info};
   margin-top: 1rem;
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 `;

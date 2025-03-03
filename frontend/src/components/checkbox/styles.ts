@@ -10,6 +10,8 @@ export const Container = styled.div<{ checked: boolean }>`
 
   width: 24px;
   height: 24px;
+
+  cursor: pointer;
   border-radius: 0.5rem;
 
   display: flex;

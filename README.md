@@ -1,5 +1,9 @@
 # NLC Full-Stack Developer
 
+## Requirements
+
+- Docker Compose version v2.32.4-desktop.1
+
 ## Running project
 
 With docker compose installed, run the following command:
@@ -16,6 +20,12 @@ Use this credentials (pre-created) to login:
 
 - **Email**: `admin@mail.com`
 - **Password**: `admin`
+
+## Ports
+
+- Frontend running on `http://localhost:3000`
+- Backend running on `http://localhost:8080`
+- Database running on `http://localhost:3306`
 
 ## Choices
 
