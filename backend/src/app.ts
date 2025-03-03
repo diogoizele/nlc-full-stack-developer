@@ -15,7 +15,7 @@ app.setErrorHandler(errorHandler);
 
 await app.register(cors, {
   allowedHeaders: ["Content-Type", "Authorization"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   origin: "*",
 });
 
