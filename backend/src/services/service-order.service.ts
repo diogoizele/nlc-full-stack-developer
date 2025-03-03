@@ -1,6 +1,7 @@
 import type { CreateServiceOrderRequest } from "../controllers/requests/create-service-order-request.types";
 import type { GetAllServiceOrdersRequest } from "../controllers/requests/get-all-service-orders-request.types";
 import { HttpError } from "../errors/http-error";
+import projectRepository from "../repositories/project.repository";
 import ServiceOrderRepository from "../repositories/service-order.repository";
 
 class ServiceOrderService {
@@ -33,13 +34,17 @@ class ServiceOrderService {
   }
 
   async createServiceOrder(payload: CreateServiceOrderRequest) {
-    this.createServiceOrderBodyValidator(payload);
+    await this.createServiceOrderBodyValidator(payload);
 
-    return await ServiceOrderRepository.create(payload);
+    return await ServiceOrderRepository.create({
+      ...payload,
+      createdDate: new Date(),
+      updatedDate: new Date(),
+    });
   }
 
   async updateServiceOrder(id: number, payload: CreateServiceOrderRequest) {
-    this.createServiceOrderBodyValidator(payload);
+    await this.createServiceOrderBodyValidator(payload);
 
     const existentServiceOrder = await ServiceOrderRepository.findById(id);
 
@@ -47,7 +52,13 @@ class ServiceOrderService {
       throw HttpError.NOT_FOUND("Service Order not found");
     }
 
-    return await ServiceOrderRepository.update(id, payload);
+    const { id: _, project, ...rest } = existentServiceOrder;
+
+    return await ServiceOrderRepository.update(id, {
+      ...rest,
+      ...payload,
+      updatedDate: new Date(),
+    });
   }
 
   async updateServiceOrderStatus(id: number, isApproved: boolean) {
@@ -76,9 +87,10 @@ class ServiceOrderService {
     return { count };
   }
 
-  private createServiceOrderBodyValidator(body: CreateServiceOrderRequest) {
-    const { name, category, createdDate, isApproved, projectId, updatedDate } =
-      body;
+  private async createServiceOrderBodyValidator(
+    body: CreateServiceOrderRequest
+  ) {
+    const { name, category, projectId } = body;
 
     if (!name) {
       throw HttpError.BAD_REQUEST("Name is required");
@@ -88,16 +100,14 @@ class ServiceOrderService {
       throw HttpError.BAD_REQUEST("Category is required");
     }
 
-    if (!createdDate) {
-      throw HttpError.BAD_REQUEST("Created Date is required");
-    }
-
     if (!projectId) {
       throw HttpError.BAD_REQUEST("Project Id is required");
     }
 
-    if (!updatedDate) {
-      throw HttpError.BAD_REQUEST("Updated Date is required");
+    const projectExists = await projectRepository.findById(projectId);
+
+    if (!projectExists) {
+      throw HttpError.BAD_REQUEST("Project not found");
     }
   }
 

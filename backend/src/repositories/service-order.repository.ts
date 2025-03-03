@@ -1,13 +1,13 @@
 import { db } from "../config/database";
+import type { CreateServiceOrderEntity } from "../controllers/requests/create-service-order-request.types";
 
-import type { CreateServiceOrderRequest } from "../controllers/requests/create-service-order-request.types";
 import type { ServiceOrder } from "../models/ServiceOrder";
 import type { BaseRepositoryInterface } from "../types/base-repository-interface.types";
 
 class ServiceOrderRepository implements BaseRepositoryInterface<ServiceOrder> {
   database = db.serviceOrder;
 
-  async create(data: CreateServiceOrderRequest) {
+  async create(data: CreateServiceOrderEntity) {
     return await this.database.create({ data });
   }
 
@@ -56,7 +56,7 @@ class ServiceOrderRepository implements BaseRepositoryInterface<ServiceOrder> {
     });
   }
 
-  async update(id: number, data: CreateServiceOrderRequest) {
+  async update(id: number, data: Omit<ServiceOrder, "id">) {
     return await this.database.update({ where: { id: id }, data });
   }
 
