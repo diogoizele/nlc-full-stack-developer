@@ -1,9 +1,20 @@
 import type { CreateServiceOrderRequest } from "../controllers/requests/create-service-order-request.types";
+import type { GetAllServiceOrdersRequest } from "../controllers/requests/get-all-service-orders-request.types";
 import { HttpError } from "../errors/http-error";
 import ServiceOrderRepository from "../repositories/service-order.repository";
 
 class ServiceOrderService {
-  async getAllServiceOrders() {
+  async getAllServiceOrders({ query }: GetAllServiceOrdersRequest) {
+    if (query) {
+      const filteredResponse = (
+        await ServiceOrderRepository.findAllByNameOrDescriptionOrCategoryOrProject(
+          query
+        )
+      ).map(this.extractProjectId);
+
+      return filteredResponse;
+    }
+
     const serviceOrders = (await ServiceOrderRepository.findAll()).map(
       this.extractProjectId
     );
@@ -37,6 +48,22 @@ class ServiceOrderService {
     }
 
     return await ServiceOrderRepository.update(id, payload);
+  }
+
+  async updateServiceOrderStatus(id: number, isApproved: boolean) {
+    const existentServiceOrder = await ServiceOrderRepository.findById(id);
+
+    if (!existentServiceOrder) {
+      throw HttpError.NOT_FOUND("Service Order not found");
+    }
+
+    const { id: _, project, ...rest } = existentServiceOrder;
+
+    return await ServiceOrderRepository.update(id, {
+      ...rest,
+      isApproved,
+      updatedDate: new Date(),
+    });
   }
 
   async delete(id: number) {

@@ -26,6 +26,10 @@ const protectedRoutes: FastifyPluginAsync = async (fastify) => {
   );
   fastify.post("/service-orders", ServiceOrderController.createServiceOrder);
   fastify.put("/service-orders/:id", ServiceOrderController.updateServiceOrder);
+  fastify.patch(
+    "/service-orders/:id/status",
+    ServiceOrderController.updateServiceOrderStatus
+  );
   fastify.delete(
     "/service-orders/:id",
     ServiceOrderController.deleteServiceOrder

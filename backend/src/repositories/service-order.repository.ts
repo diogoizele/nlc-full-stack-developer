@@ -24,6 +24,38 @@ class ServiceOrderRepository implements BaseRepositoryInterface<ServiceOrder> {
     });
   }
 
+  async findAllByNameOrDescriptionOrCategoryOrProject(query: string) {
+    return await this.database.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              contains: query,
+            },
+          },
+          {
+            description: {
+              contains: query,
+            },
+          },
+          {
+            category: {
+              contains: query,
+            },
+          },
+          {
+            project: {
+              name: {
+                contains: query,
+              },
+            },
+          },
+        ],
+      },
+      include: { project: true },
+    });
+  }
+
   async update(id: number, data: CreateServiceOrderRequest) {
     return await this.database.update({ where: { id: id }, data });
   }
