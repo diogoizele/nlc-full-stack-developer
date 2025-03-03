@@ -27,6 +27,7 @@ export const MenuContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: 0.5rem;
   height: 2.3rem;
+  min-width: 340px;
 
   overflow: hidden;
   border: 2px solid ${({ theme }) => theme.colors.white};

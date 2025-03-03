@@ -1,17 +1,18 @@
 import LinesEllipsis from "react-lines-ellipsis";
 
-import { GetAllProjectsResponse } from "../../api/interfaces/projects";
 import { QuantityBadge } from "../quantity-badge";
 import { AttachedItemsText, Container, Id, Name } from "./styles";
+import { ProjectCartItemProps } from "./types";
 
 export const ProjectCardItem = ({
   id,
   name,
   description,
   serviceOrdersIds,
-}: GetAllProjectsResponse) => {
+  onClick,
+}: ProjectCartItemProps) => {
   return (
-    <Container>
+    <Container onClick={onClick}>
       <div className="flex justify-between flex-1">
         <Id>#{id}</Id>
         <AttachedItemsText>

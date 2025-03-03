@@ -33,5 +33,6 @@ apiClient.interceptors.response.use(
       clearToken();
       setIsLoading(false);
     }
+    return Promise.reject(error);
   }
 );

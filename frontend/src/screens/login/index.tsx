@@ -34,7 +34,7 @@ export const LoginScreen = () => {
       toast.success("Logged in successfully");
     },
     onError: (error: AxiosError) => {
-      if (error.response?.status === 401) {
+      if (error?.response?.status === 401) {
         toast.error("Invalid email or password");
       } else {
         toast.error("An error occurred. Please try again later");
@@ -70,12 +70,12 @@ export const LoginScreen = () => {
         <Controller
           control={control}
           name="password"
-          rules={{ required: "Password is required" }}
+          rules={{ required: "* Password is required" }}
           render={({ field }) => (
             <Input
               label="Password"
               type="password"
-              placeholder="* Enter your password..."
+              placeholder="Enter your password..."
               autoCapitalize="none"
               autoCorrect="off"
               error={errors.password?.message}

@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router";
 import { Redirect } from "../components/redirect";
 import { HomeScreen } from "../screens/home";
 import { LoginScreen } from "../screens/login";
+import { ProjectDetailsScreen } from "../screens/project-details";
 import { ProjectsScreen } from "../screens/projects";
 import { ServiceOrdersScreen } from "../screens/service-orders";
 import { useAuthStore } from "../stores/auth.store";
@@ -25,6 +26,10 @@ export const Router = () => {
       <Routes>
         <Route path="/" element={<HomeScreen />}>
           <Route index element={<ProjectsScreen />} />
+          <Route
+            path="projects/:projectId"
+            element={<ProjectDetailsScreen />}
+          />
           <Route path="service-orders" element={<ServiceOrdersScreen />} />
         </Route>
         <Route path="*" element={<div>Not found...</div>} />

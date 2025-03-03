@@ -5,23 +5,48 @@ import { ButtonProps } from "./types";
 
 export const StyledButton = styled.button<ButtonProps>`
   padding: 0 1.5rem;
-  border: none;
+  border: ${({ variant }) => {
+    switch (variant) {
+      case "outlined":
+        return "2px solid";
+      case "text":
+      case "filled":
+      default:
+        return "none";
+    }
+  }};
   border-radius: 5px;
-  background-color: ${({ theme, variant }) => {
+  background-color: ${({ theme, variant, mode }) => {
     switch (variant) {
       case "outlined":
       case "text":
         return "transparent";
       case "filled":
       default:
-        return theme.colors.primary;
+        switch (mode) {
+          case "danger":
+            return theme.colors.danger;
+          case "normal":
+            return theme.colors.text;
+          case "primary":
+          default:
+            return theme.colors.primary;
+        }
     }
   }};
-  color: ${({ theme, variant }) => {
+  color: ${({ theme, variant, mode }) => {
     switch (variant) {
       case "outlined":
       case "text":
-        return theme.colors.primary;
+        switch (mode) {
+          case "danger":
+            return theme.colors.danger;
+          case "normal":
+            return theme.colors.text;
+          case "primary":
+          default:
+            return theme.colors.primary;
+        }
       default:
       case "filled":
         return theme.colors.white;
@@ -36,22 +61,46 @@ export const StyledButton = styled.button<ButtonProps>`
   width: ${({ fullWidth }) => (fullWidth ? "100%" : "auto")};
 
   &:hover {
-    background-color: ${({ theme, variant }) => {
+    background-color: ${({ theme, variant, mode }) => {
       switch (variant) {
         case "text":
           return "transparent";
         case "outlined":
-          return alpha(theme.colors.primary, 0.1);
+          switch (mode) {
+            case "danger":
+              return alpha(theme.colors.danger, 0.1);
+            case "normal":
+              return alpha(theme.colors.text, 0.1);
+            case "primary":
+            default:
+              return alpha(theme.colors.primary, 0.1);
+          }
         case "filled":
         default:
-          return alpha(theme.colors.primary, 0.9);
+          switch (mode) {
+            case "danger":
+              return alpha(theme.colors.danger, 0.8);
+            case "normal":
+              return alpha(theme.colors.text, 0.8);
+            case "primary":
+            default:
+              return alpha(theme.colors.primary, 0.8);
+          }
       }
     }};
-    color: ${({ theme, variant }) => {
+    color: ${({ theme, variant, mode }) => {
       switch (variant) {
         case "outlined":
         case "text":
-          return alpha(theme.colors.primary, 0.8);
+          switch (mode) {
+            case "danger":
+              return theme.colors.danger;
+            case "normal":
+              return theme.colors.text;
+            case "primary":
+            default:
+              return theme.colors.primary;
+          }
         default:
         case "filled":
           return theme.colors.white;
@@ -74,15 +123,31 @@ export const StyledButton = styled.button<ButtonProps>`
   }
 
   &:active {
-    background-color: ${({ theme, variant }) => {
+    background-color: ${({ theme, variant, mode }) => {
       switch (variant) {
         case "text":
           return "transparent";
         case "outlined":
-          return alpha(theme.colors.primary, 0.2);
+          switch (mode) {
+            case "danger":
+              return alpha(theme.colors.danger, 0.2);
+            case "normal":
+              return alpha(theme.colors.text, 0.2);
+            case "primary":
+            default:
+              return alpha(theme.colors.primary, 0.2);
+          }
         case "filled":
         default:
-          return alpha(theme.colors.primary, 0.8);
+          switch (mode) {
+            case "danger":
+              return alpha(theme.colors.danger, 0.9);
+            case "normal":
+              return alpha(theme.colors.text, 0.9);
+            case "primary":
+            default:
+              return alpha(theme.colors.primary, 0.9);
+          }
       }
     }};
   }

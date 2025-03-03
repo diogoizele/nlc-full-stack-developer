@@ -7,10 +7,13 @@ export const Button = ({
   fullWidth = true,
   icon,
   variant = "filled",
+  mode = "primary",
+  type = "button",
   ...props
 }: ButtonProps) => {
   return (
     <StyledButton
+      mode={mode}
       fullWidth={fullWidth}
       height={height}
       {...props}

@@ -1,19 +1,18 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa6";
 
 import { createProject } from "../../api/projects";
 import { Button } from "../../components/button";
 import { Input } from "../../components/input";
-import { Modal } from "../../components/modal";
+import { ModalProjectForm } from "../../components/modal-project-form";
 import { PageContainer } from "../../components/page-container";
 import { ProjectList } from "../../components/project-list";
-import { TextArea } from "../../components/text-area";
 import { useAppStore } from "../../stores/app.store";
 
-type FormData = {
+export type ProjectFormData = {
   name: string;
   description: string;
 };
@@ -28,7 +27,7 @@ export const ProjectsScreen = () => {
     handleSubmit,
     clearErrors,
     reset,
-  } = useForm<FormData>();
+  } = useForm<ProjectFormData>();
 
   const queryClient = useQueryClient();
   const setIsLoading = useAppStore((state) => state.setIsLoading);
@@ -52,7 +51,7 @@ export const ProjectsScreen = () => {
     },
   });
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: ProjectFormData) => {
     setIsLoading(true);
     mutation.mutate(data);
   };
@@ -83,55 +82,16 @@ export const ProjectsScreen = () => {
 
         <ProjectList searchQuery={searchQuery} />
       </div>
-      <Modal
-        title="Create new project"
+      <ModalProjectForm
         isOpen={isModalOpen}
+        title="Create new project"
+        cancelButtonText="Cancel"
+        submitButtonText="Create project"
+        control={control}
+        errors={errors}
         onClose={() => setIsModalOpen(false)}
-      >
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
-          <Controller
-            control={control}
-            name="name"
-            rules={{
-              required: "* Name is required",
-            }}
-            render={({ field }) => (
-              <Input
-                label="Name"
-                placeholder="Enter project name.."
-                error={errors.name?.message}
-                {...field}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="description"
-            rules={{ required: "* Description is required" }}
-            render={({ field }) => (
-              <TextArea
-                label="Description"
-                placeholder="Project Description"
-                error={errors.description?.message}
-                {...field}
-              />
-            )}
-          />
-          <div className="flex gap-4 justify-end">
-            <Button
-              fullWidth={false}
-              type="button"
-              variant="text"
-              onClick={() => setIsModalOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" fullWidth={false}>
-              Add Project
-            </Button>
-          </div>
-        </form>
-      </Modal>
+        onSubmit={handleSubmit(onSubmit)}
+      />
     </PageContainer>
   );
 };

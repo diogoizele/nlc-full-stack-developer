@@ -1,7 +1,8 @@
+import { useQuery } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router";
 
-import { useQuery } from "@tanstack/react-query";
 import { fetchProjectsCount } from "../../api/projects";
+import { fetchServiceOrdersCount } from "../../api/service-orders";
 import logoutSVG from "../../assets/images/logout.svg";
 import nlcLogo from "../../assets/images/nlc-logo.png";
 import { useAuthStore } from "../../stores/auth.store";
@@ -20,6 +21,10 @@ export const Header = () => {
     queryFn: fetchProjectsCount,
   });
 
+  const { data: serviceOrdersCount } = useQuery({
+    queryKey: ["service-orders-count"],
+    queryFn: fetchServiceOrdersCount,
+  });
   const handleLogout = () => {
     clearToken();
     LocalStorageManager.remove("token");
@@ -49,7 +54,7 @@ export const Header = () => {
           to="/service-orders"
         >
           Service Orders
-          <QuantityBadge quantity={0} />
+          <QuantityBadge quantity={serviceOrdersCount?.count ?? 0} />
         </MenuItem>
       </MenuContainer>
       <div className="flex flex-1 justify-end">

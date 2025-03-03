@@ -11,10 +11,15 @@ export const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.colors.text};
 
     font-size: 1rem;
+
   }
  
   #root {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
   button {
@@ -24,5 +29,5 @@ export const GlobalStyles = createGlobalStyle`
   a {
     text-decoration: none;
     color: inherit;
-  }
+  } 
 `;

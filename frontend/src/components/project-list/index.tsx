@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "@uidotdev/usehooks";
 import { memo, useEffect } from "react";
 
+import { useNavigate } from "react-router";
 import { fetchAllProjects } from "../../api/projects";
 import { useAppStore } from "../../stores/app.store";
 import { ProjectCardItem } from "../project-card-item";
@@ -13,18 +14,12 @@ const ProjectListWithoutMemo = ({ searchQuery }: ProjectListProps) => {
   const setIsLoading = useAppStore((state) => state.setIsLoading);
   const setProjectsQuantity = useAppStore((state) => state.setProjectsQuantity);
 
-  const { data, isPending, error, isError, isFetched } = useQuery({
+  const navigate = useNavigate();
+
+  const { data, isFetching, error, isError, isFetched } = useQuery({
     queryKey: ["projects", debouncedFilter],
     queryFn: () => fetchAllProjects(debouncedFilter),
   });
-
-  useEffect(() => {
-    if (isPending) {
-      setIsLoading(true);
-    } else {
-      setIsLoading(false);
-    }
-  }, [isPending, isFetched, isError]);
 
   if (isError) {
     return <>Error: {error?.message}</>;
@@ -34,10 +29,20 @@ const ProjectListWithoutMemo = ({ searchQuery }: ProjectListProps) => {
     setProjectsQuantity(data?.length || 0);
   }, [data]);
 
+  if (isFetching) {
+    setIsLoading(true);
+    return null;
+  }
+
+  if (isFetched || isError) {
+    setIsLoading(false);
+  }
+
   return (
     <div className="flex flex-wrap gap-8 mt-4">
       {data?.map((project) => (
         <ProjectCardItem
+          onClick={() => navigate(`/projects/${project.id}`)}
           key={project.id}
           id={project.id}
           name={project.name}
