@@ -24,12 +24,7 @@ class ServiceOrderService {
   }
 
   async getServiceOrderById(id: number) {
-    const serviceOrder = await ServiceOrderRepository.findById(id);
-
-    if (!serviceOrder) {
-      throw HttpError.NOT_FOUND("ServiceOrder not found");
-    }
-
+    const serviceOrder = await this.exists(id);
     return this.extractProjectId(serviceOrder);
   }
 
@@ -46,11 +41,7 @@ class ServiceOrderService {
   async updateServiceOrder(id: number, payload: CreateServiceOrderRequest) {
     await this.createServiceOrderBodyValidator(payload);
 
-    const existentServiceOrder = await ServiceOrderRepository.findById(id);
-
-    if (!existentServiceOrder) {
-      throw HttpError.NOT_FOUND("Service Order not found");
-    }
+    const existentServiceOrder = await this.exists(id);
 
     const { id: _, project, ...rest } = existentServiceOrder;
 
@@ -62,11 +53,7 @@ class ServiceOrderService {
   }
 
   async updateServiceOrderStatus(id: number, isApproved: boolean) {
-    const existentServiceOrder = await ServiceOrderRepository.findById(id);
-
-    if (!existentServiceOrder) {
-      throw HttpError.NOT_FOUND("Service Order not found");
-    }
+    const existentServiceOrder = await this.exists(id);
 
     const { id: _, project, ...rest } = existentServiceOrder;
 
@@ -78,6 +65,8 @@ class ServiceOrderService {
   }
 
   async delete(id: number) {
+    await this.exists(id);
+
     await ServiceOrderRepository.delete(id);
   }
 
@@ -111,8 +100,18 @@ class ServiceOrderService {
     const projectExists = await projectRepository.findById(projectId);
 
     if (!projectExists) {
-      throw HttpError.BAD_REQUEST("Project not found");
+      throw HttpError.NOT_FOUND("Project not found");
     }
+  }
+
+  private async exists(id: number) {
+    const serviceOrder = await ServiceOrderRepository.findById(id);
+
+    if (!serviceOrder) {
+      throw HttpError.NOT_FOUND("ServiceOrder not found");
+    }
+
+    return serviceOrder;
   }
 
   private extractProjectId({ projectId, ...rest }: { projectId: number }) {

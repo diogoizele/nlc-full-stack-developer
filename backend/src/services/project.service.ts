@@ -21,13 +21,7 @@ class ProjectService {
   }
 
   async getProjectById(id: number) {
-    const project = await ProjectRepository.findById(id);
-
-    if (!project) {
-      throw HttpError.NOT_FOUND("Project not found");
-    }
-
-    return project;
+    return await this.exists(id);
   }
 
   async createProject(payload: CreateProjectRequest) {
@@ -39,16 +33,14 @@ class ProjectService {
   async updateProject(id: number, payload: CreateProjectRequest) {
     this.createProjectBodyValidator(payload);
 
-    const existentProject = await ProjectRepository.findById(id);
-
-    if (!existentProject) {
-      throw HttpError.NOT_FOUND("Project not found");
-    }
+    await this.exists(id);
 
     return await ProjectRepository.update(id, payload);
   }
 
   async delete(id: number) {
+    await this.exists(id);
+
     await ProjectRepository.delete(id);
   }
 
@@ -63,6 +55,15 @@ class ProjectService {
     if (!name) {
       throw HttpError.BAD_REQUEST("Name is required");
     }
+  }
+
+  private async exists(id: number) {
+    const project = await ProjectRepository.findById(id);
+    if (!project) {
+      throw HttpError.NOT_FOUND("Project not found");
+    }
+
+    return project;
   }
 
   private getServiceOrdersIdByProject({
