@@ -104,6 +104,10 @@ class ServiceOrderService {
       throw HttpError.BAD_REQUEST("Project Id is required");
     }
 
+    if (typeof projectId !== "number") {
+      throw HttpError.BAD_REQUEST("Project Id must be a number");
+    }
+
     const projectExists = await projectRepository.findById(projectId);
 
     if (!projectExists) {
