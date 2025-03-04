@@ -11,6 +11,10 @@
 With docker compose installed, run the following command:
 
 ```bash
+git clone https://github.com/diogoizele/nlc-full-stack-developer.git
+
+cd nlc-full-stack-developer
+
 docker compose build --no-cache && docker compose up -d
 ```
 
