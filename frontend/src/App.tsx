@@ -1,11 +1,11 @@
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "react-hot-toast";
 import { BrowserRouter } from "react-router";
 import { ThemeProvider } from "styled-components";
 
 import { Router } from "./routes";
 import { GlobalStyles } from "./styles/global.styles";
 
-import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "react-hot-toast";
 import { queryClient } from "./api/base/client";
 import { Loading } from "./components/loading";
 import { theme } from "./styles/theme/default";

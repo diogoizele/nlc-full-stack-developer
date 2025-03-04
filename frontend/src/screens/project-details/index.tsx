@@ -122,14 +122,16 @@ export const ProjectDetailsScreen = () => {
   return (
     <PageContainer>
       <div className="flex flex-col flex-1 gap-4 overflow-y-auto overflow-x-hidden p-8">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 max-sm:flex-col max-sm:text-center">
           <button type="button" onClick={() => navigate("/")}>
             <LuArrowLeft size={32} />
           </button>
-          <h2 className="font-bold text-2xl italic">Project #{projectId}</h2>
+          <h2 className="font-bold text-2xl italic max-sm:text-xl">
+            Project #{projectId}
+          </h2>
           <Name>{data?.name}</Name>
         </div>
-        <div className="flex items-center justify-between font-medium">
+        <div className="flex items-center justify-between gap-5 font-medium max-sm:flex-col">
           <p>{data?.description}</p>
           <div className="flex gap-4">
             <Button

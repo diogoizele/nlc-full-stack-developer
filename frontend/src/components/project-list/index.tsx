@@ -29,7 +29,7 @@ const ProjectListWithoutMemo = ({ searchQuery }: ProjectListProps) => {
   }, [isFetching]);
 
   return (
-    <div className="flex flex-wrap gap-8 mt-4 flex-1">
+    <div className="flex flex-wrap gap-8 mt-4 flex-1 max-sm:justify-center">
       {data?.length === 0 && <EmptyList title="No projects found" />}
 
       {data?.map((project) => (

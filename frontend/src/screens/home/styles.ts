@@ -10,4 +10,9 @@ export const Container = styled.div`
 
   max-width: 100%;
   width: 1550px;
+
+  @media (max-width: 768px) {
+    width: auto;
+    max-width: auto;
+  }
 `;

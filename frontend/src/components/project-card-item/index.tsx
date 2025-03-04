@@ -22,7 +22,7 @@ export const ProjectCardItem = ({
       </div>
       <Name>{name}</Name>
 
-      <p className="font-semibold text-end text-sm">
+      <p className="font-semibold text-end text-sm max-sm:text-xs">
         <LinesEllipsis text={description ?? ""} maxLine={2} />
       </p>
     </Container>

@@ -98,8 +98,8 @@ export const ServiceOrdersScreen = () => {
     <PageContainer>
       <div className="flex flex-col gap-4 overflow-y-auto p-8 flex-1">
         <h2 className="font-bold text-2xl">Service Orders</h2>
-        <div className="flex items-center justify-between">
-          <div className="w-1/2 max-w-prose">
+        <div className="flex items-center justify-between max-sm:flex-col max-sm:gap-5 max-sm:items-stretch">
+          <div className="w-1/2 max-w-prose max-sm:w-full">
             <Input
               placeholder="Search service orders..."
               value={searchQuery}

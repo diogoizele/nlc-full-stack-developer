@@ -22,6 +22,11 @@ export const Form = styled.form`
   align-items: center;
 
   width: 448px;
+
+  @media (max-width: 768px) {
+    width: 90%;
+    padding: 2rem;
+  }
 `;
 
 export const AppName = styled.h2`

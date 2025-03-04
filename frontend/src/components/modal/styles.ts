@@ -19,6 +19,12 @@ export const Container = styled.div`
   border-radius: 0.5rem;
   padding: 2rem;
   width: 40rem;
+
+  @media (max-width: 768px) {
+    width: 90%;
+    height: 90%;
+    overflow-y: auto;
+  }
 `;
 
 export const CloseButton = styled.button`
