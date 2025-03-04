@@ -38,10 +38,10 @@ export const fetchServiceOrdersCount = async () => {
 export const createServiceOrder = async (
   payload: CreateServiceOrderPayload
 ) => {
-  const response = await apiClient.post<ServiceOrder>(
-    "/service-orders",
-    payload
-  );
+  const response = await apiClient.post<ServiceOrder>("/service-orders", {
+    ...payload,
+    projectId: Number(payload.projectId),
+  });
 
   return response.data;
 };

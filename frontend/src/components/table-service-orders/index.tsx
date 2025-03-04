@@ -1,5 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FaTrash } from "react-icons/fa6";
@@ -8,14 +8,13 @@ import { useNavigate } from "react-router";
 import { useTheme } from "styled-components";
 
 import { GetAllServiceOrdersResponse } from "../../api/interfaces/service-orders";
-import { fetchAllProjects } from "../../api/projects";
 import {
   deleteServiceOrder,
   fetchServiceOrderById,
   updateServiceOrder,
   updateServiceOrderStatus,
 } from "../../api/service-orders";
-import { ServiceOrderFormData } from "../../screens/service-orders";
+import { ServiceOrderFormData } from "../../screens/service-orders/types";
 import { useAppStore } from "../../stores/app.store";
 import { alpha } from "../../utils/alpha";
 import { formatDate } from "../../utils/format-date";
@@ -52,21 +51,6 @@ export const TableServiceOrders = ({
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { colors } = useTheme();
-
-  const { data: projects } = useQuery({
-    queryKey: ["projects"],
-    queryFn: () => fetchAllProjects(),
-    enabled: isEditingModalOpen,
-  });
-
-  const projectOptions = useMemo(
-    () =>
-      (projects ?? []).map((project) => ({
-        label: `#${project.id} - ${project.name}`,
-        value: project.id,
-      })),
-    [projects]
-  );
 
   const mutationFetchServiceOrderDetails = useMutation({
     mutationFn: fetchServiceOrderById,

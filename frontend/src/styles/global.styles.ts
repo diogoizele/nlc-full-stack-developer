@@ -1,8 +1,15 @@
 import { createGlobalStyle } from "styled-components";
+import { alpha } from "../utils/alpha";
 
 export const GlobalStyles = createGlobalStyle`
   * {
     box-sizing: border-box;
+    
+    outline-color: ${({ theme }) => theme.colors.primary};
+
+    ::selection {
+      background-color: ${({ theme }) => alpha(theme.colors.primary, 0.2)};
+    }
   }
 
   body {

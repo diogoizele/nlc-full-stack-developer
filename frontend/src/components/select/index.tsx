@@ -2,7 +2,6 @@ import { MouseEvent, useEffect, useRef, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { TiArrowSortedDown } from "react-icons/ti";
 
-import console from "console";
 import {
   Container,
   Dropdown,
@@ -45,7 +44,6 @@ export const Select = ({
     setSelectedOption(getOptionLabel(option));
     setIsOpenDropdown(false);
     if (onChange) {
-      console.log(getOptionValue(option), typeof getOptionValue(option));
       onChange(getOptionValue(option));
     }
   };

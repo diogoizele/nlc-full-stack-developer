@@ -21,12 +21,9 @@ export const ModalServiceOrderForm = ({
   cancelButtonText,
   submitButtonText,
   defaultValues,
-
   onClose,
   onSubmit,
 }: ModalServiceOrderFormProps) => {
-  console.log(defaultValues);
-
   const { data } = useQuery({
     queryKey: ["projects"],
     queryFn: () => fetchAllProjects(),
@@ -100,12 +97,12 @@ export const ModalServiceOrderForm = ({
           control={control}
           name="projectId"
           rules={required("Project")}
-          defaultValue={Number(defaultValues?.project.id)}
+          defaultValue={defaultValues?.project?.id}
           render={({ field }) => (
             <Select
               defaultOption={createProjectLabel(
-                defaultValues?.project.id,
-                defaultValues?.project.name
+                defaultValues?.project?.id,
+                defaultValues?.project?.name
               )}
               label="Project"
               options={projectOptions ?? []}

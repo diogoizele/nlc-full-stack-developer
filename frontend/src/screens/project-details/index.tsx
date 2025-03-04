@@ -97,6 +97,18 @@ export const ProjectDetailsScreen = () => {
     mutationDeleteProject.mutate(projectId);
   };
 
+  const handleCreateNewServiceOrder = () => {
+    navigate(`/service-orders`, {
+      state: {
+        create: true,
+        project: {
+          id: projectId,
+          name: data?.name,
+        },
+      },
+    });
+  };
+
   if (isFetching) {
     setIsLoading(true);
     return null;
@@ -143,17 +155,7 @@ export const ProjectDetailsScreen = () => {
               iconButton
               icon={<FaPlus />}
               fullWidth={false}
-              onClick={() =>
-                navigate(`/service-orders`, {
-                  state: {
-                    create: true,
-                    projectOption: {
-                      value: projectId,
-                      label: data?.name,
-                    },
-                  },
-                })
-              }
+              onClick={handleCreateNewServiceOrder}
             />
           </AttachedServiceOrdersText>
           <div className="pt-6 flex-1 overflow-x-scroll scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-secondary scrollbar-w-1 scrollbar-thumb-rounded scrollbar-track-rounded">

@@ -1,6 +1,6 @@
 import { Control, FieldErrors } from "react-hook-form";
 import { GetAllServiceOrdersResponse } from "../../api/interfaces/service-orders";
-import { ServiceOrderFormData } from "../../screens/service-orders";
+import { ServiceOrderFormData } from "../../screens/service-orders/types";
 import { ModalProps } from "../modal/types";
 
 export interface ModalServiceOrderFormProps
@@ -13,7 +13,7 @@ export interface ModalServiceOrderFormProps
   cancelButtonText: string;
 
   defaultValues?: Partial<Omit<GetAllServiceOrdersResponse, "project">> & {
-    project: Partial<GetAllServiceOrdersResponse["project"]>;
+    project?: Partial<GetAllServiceOrdersResponse["project"]>;
   };
 
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;

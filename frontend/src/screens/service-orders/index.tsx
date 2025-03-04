@@ -14,25 +14,17 @@ import { Button } from "../../components/button";
 import { Input } from "../../components/input";
 import { ModalServiceOrderForm } from "../../components/modal-service-order-form";
 import { PageContainer } from "../../components/page-container";
-import { OptionProps } from "../../components/select/types";
 import { TableServiceOrders } from "../../components/table-service-orders";
 import { useAppStore } from "../../stores/app.store";
-
-export type ServiceOrderFormData = {
-  name: string;
-  description: string;
-  category: string;
-  projectId: number;
-  isApproved: boolean;
-};
+import { ServiceOrderFormData, ServiceOrdersState } from "./types";
 
 export const ServiceOrdersScreen = () => {
-  const { state } = useLocation();
+  const { state } = useLocation() as ServiceOrdersState;
 
   const [searchQuery, setSearchQuery] = useState(state?.serviceOrderName);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(!!state?.create);
-  const [project, setProject] = useState<OptionProps | undefined>(
-    state.projectOption
+  const [project, setProject] = useState<typeof state.project | undefined>(
+    state?.project
   );
 
   const debouncedFilter = useDebounce(searchQuery, 500);
@@ -55,7 +47,7 @@ export const ServiceOrdersScreen = () => {
 
   const mutationCreateServiceOrder = useMutation({
     mutationFn: createServiceOrder,
-    onSuccess: ({ id }) => {
+    onSuccess: ({ id, projectId }) => {
       queryClient.invalidateQueries({ queryKey: ["service-orders"] });
       queryClient.removeQueries({ queryKey: ["service-orders"], exact: false });
       queryClient.refetchQueries({ queryKey: ["service-orders"] });
@@ -66,11 +58,12 @@ export const ServiceOrdersScreen = () => {
       setIsLoading(false);
       toast.success(`Service Order with id #${id} created successfully`);
 
-      if (state?.create && state?.projectId) {
-        navigate(`/projects/${state.projectId}`);
+      if (state?.create && project && projectId === Number(project.id)) {
+        navigate(`/projects/${state.project.id}`);
       }
     },
     onError: () => {
+      setIsLoading(false);
       setIsCreateModalOpen(false);
       toast.error(
         "An error occurred to create service order. Please try again later"
@@ -94,6 +87,7 @@ export const ServiceOrdersScreen = () => {
     setIsCreateModalOpen(true);
     clearErrors();
     reset();
+    setProject(undefined);
   };
 
   useEffect(() => {
@@ -130,10 +124,7 @@ export const ServiceOrdersScreen = () => {
         title="Create Service Order"
         cancelButtonText="Cancel"
         defaultValues={{
-          project: {
-            id: Number(project?.value),
-            name: project?.label,
-          },
+          project,
         }}
         submitButtonText="Create Service Order"
         onClose={handleCloseModal}
