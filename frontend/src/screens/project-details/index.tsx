@@ -48,6 +48,7 @@ export const ProjectDetailsScreen = () => {
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: ["projects"] });
       queryClient.refetchQueries({ queryKey: ["projects-count"] });
+      queryClient.refetchQueries({ queryKey: ["service-orders-count"] });
 
       setIsEditingModalOpen(false);
       reset();
@@ -185,7 +186,8 @@ export const ProjectDetailsScreen = () => {
       >
         <p className="font-medium">
           Are you sure you want to delete this{" "}
-          <span className="font-semibold">project?</span> This action{" "}
+          <span className="font-semibold">project</span> and their attached{" "}
+          <span className="font-semibold">service orders</span>? This action{" "}
           <span className="text-danger font-bold">cannot</span> be undone.
         </p>
       </ModalConfirmDelete>
