@@ -63,7 +63,12 @@ class ProjectRepository implements BaseRepositoryInterface<Project> {
   }
 
   async delete(id: number) {
-    return await this.database.delete({ where: { id: id } });
+    return await this.database.delete({
+      where: { id: id },
+      include: {
+        serviceOrders: true,
+      },
+    });
   }
 
   async count() {
